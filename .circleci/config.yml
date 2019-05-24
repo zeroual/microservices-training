@@ -47,7 +47,7 @@ jobs:
       - image: circleci/openjdk:8-jdk
     working_directory: ~/repo
 
-    -run: ls
+    -run: ls -a
 
 workflows:
   version: 2
