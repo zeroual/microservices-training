@@ -12,3 +12,5 @@ eureka:
     serviceUrl:
       defaultZone: http://discovery-server-service
       leaseRenewalIntervalInSeconds: 10
+  instance:
+    prefer-ip-address: true
