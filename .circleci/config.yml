@@ -58,7 +58,7 @@ jobs:
       - GOOGLE_PROJECT_ID: "microservices-training-demo"
       - GOOGLE_COMPUTE_ZONE: "us-central1-a"
       - GOOGLE_CLUSTER_NAME: "microservicestrainingdemo"
-      - GOOGLE_REGISTRY_URL: "eu.gcr.io"
+      - GOOGLE_REGISTRY_URL: "eu.gcr.io/microservices-training-demo"
     working_directory: ~/repo
 
     steps:
@@ -79,30 +79,30 @@ jobs:
       - run:
           name: docker config-server
           command: |
-            docker image build -t ${GOOGLE_REGISTRY_URL}/${GOOGLE_PROJECT_ID}/config-server:${CIRCLE_WORKFLOW_ID} config-server/
+            docker image build -t ${GOOGLE_REGISTRY_URL}/config-server:${CIRCLE_WORKFLOW_ID} config-server/
             gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://${GOOGLE_REGISTRY_URL}
-            docker push ${GOOGLE_REGISTRY_URL}/${GOOGLE_PROJECT_ID}/config-server:${CIRCLE_WORKFLOW_ID}
+            docker push ${GOOGLE_REGISTRY_URL}/config-server:${CIRCLE_WORKFLOW_ID}
 
       - run:
           name: docker discovery-server
           command: |
-            docker image build -t ${GOOGLE_REGISTRY_URL}/${GOOGLE_PROJECT_ID}/discovery-server:${CIRCLE_WORKFLOW_ID} discovery-server/
+            docker image build -t ${GOOGLE_REGISTRY_URL}/discovery-server:${CIRCLE_WORKFLOW_ID} discovery-server/
             gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://${GOOGLE_REGISTRY_URL}
-            docker push ${GOOGLE_REGISTRY_URL}/${GOOGLE_PROJECT_ID}/discovery-server:${CIRCLE_WORKFLOW_ID}
+            docker push ${GOOGLE_REGISTRY_URL}/discovery-server:${CIRCLE_WORKFLOW_ID}
 
       - run:
           name: docker service1
           command: |
-            docker image build -t ${GOOGLE_REGISTRY_URL}/${GOOGLE_PROJECT_ID}/service1:${CIRCLE_WORKFLOW_ID} service1/
+            docker image build -t ${GOOGLE_REGISTRY_URL}/service1:${CIRCLE_WORKFLOW_ID} service1/
             gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://${GOOGLE_REGISTRY_URL}
-            docker push ${GOOGLE_REGISTRY_URL}/${GOOGLE_PROJECT_ID}/service1:${CIRCLE_WORKFLOW_ID}
+            docker push ${GOOGLE_REGISTRY_URL}/service1:${CIRCLE_WORKFLOW_ID}
 
       - run:
           name: docker service2
           command: |
-            docker image build -t ${GOOGLE_REGISTRY_URL}/${GOOGLE_PROJECT_ID}/service2:${CIRCLE_WORKFLOW_ID} service2/
+            docker image build -t ${GOOGLE_REGISTRY_URL}/service2:${CIRCLE_WORKFLOW_ID} service2/
             gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://${GOOGLE_REGISTRY_URL}
-            docker push ${GOOGLE_REGISTRY_URL}/${GOOGLE_PROJECT_ID}/service2:${CIRCLE_WORKFLOW_ID}
+            docker push ${GOOGLE_REGISTRY_URL}/service2:${CIRCLE_WORKFLOW_ID}
 
       - run:
           name: Deploy to Kubernetes
@@ -110,6 +110,9 @@ jobs:
             envsubst < k8s.yml > patched_k8s.yml
             kubectl apply -f patched_k8s.yml
             kubectl rollout status deployment/config-server
+            kubectl rollout status deployment/discovery-server
+            kubectl rollout status deployment/service1
+            kubectl rollout status deployment/service2
 
 workflows:
   version: 2
