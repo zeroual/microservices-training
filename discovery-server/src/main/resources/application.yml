@@ -10,5 +10,5 @@ eureka:
     registerWithEureka: false
     fetchRegistry: false
     serviceUrl:
-      defaultZone: http://localhost:9091
+      defaultZone: http://discovery-server-service
       leaseRenewalIntervalInSeconds: 10

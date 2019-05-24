@@ -62,11 +62,6 @@ spec:
           image: ${GOOGLE_REGISTRY_URL}/service1:${CIRCLE_WORKFLOW_ID}
           ports:
             - containerPort: 8001
-          env:
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: config-server-service
-            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-              value: discovery-server-service/eureka/
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -88,11 +83,6 @@ spec:
           image: ${GOOGLE_REGISTRY_URL}/service2:${CIRCLE_WORKFLOW_ID}
           ports:
             - containerPort: 8002
-          env:
-            - name: SPRING_CLOUD_CONFIG_URI
-              value: config-server-service
-            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
-              value: discovery-server-service/eureka/
 
 ---
 apiVersion: v1
