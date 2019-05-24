@@ -113,6 +113,8 @@ spec:
 
   selector:
     app: config-server
+  type: LoadBalancer
+  loadBalancerIP: ""
 ---
 apiVersion: v1
 kind: Service
@@ -127,6 +129,8 @@ spec:
 
   selector:
     app: discovery-server
+  type: LoadBalancer
+  loadBalancerIP: ""
 ---
 apiVersion: v1
 kind: Service
@@ -141,3 +145,5 @@ spec:
 
   selector:
     app: service2
+  type: LoadBalancer
+  loadBalancerIP: ""
