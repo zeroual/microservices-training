@@ -42,17 +42,37 @@ jobs:
 
       # package app
       - run: mvn package -DskipTests
+      - persist_to_workspace:
+          root: .
+          paths:
+            - config-server
+            - discovery-server
+            - service1
+            - service2
   deploy:
     docker:
       - image: circleci/openjdk:8-jdk
     working_directory: ~/repo
 
     steps:
-      - run: ls
+      -  attach_workspace:
+           at:
+             - config-server
+             - discovery-server
+             - service1
+             - service2
+      - run: ls -al
+      # build docker images
+      - run: docker image build -t config-server config-server/
+      - run: docker image build -t discovery-server discovery-server/
+      - run: docker image build -t service1 service1/
+      - run: docker image build -t service2 service2/
 
 workflows:
   version: 2
   build_and_deploy:
     jobs:
       - build
-      - deploy
+      - deploy:
+          requires:
+            - build
