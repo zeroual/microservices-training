@@ -74,7 +74,7 @@ jobs:
             gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
             gcloud --quiet container clusters get-credentials ${GOOGLE_CLUSTER_NAME}
 
-      -run:
+      - run:
           name: docker config-server
           command: |
             docker image build -t eu.gcr.io/${GOOGLE_PROJECT_ID}/config-server:${CIRCLE_WORKFLOW_ID} config-server/
