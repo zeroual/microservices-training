@@ -13,3 +13,5 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://discovery-server-service/eureka/
+      instance:
+        prefer-ip-address: true
