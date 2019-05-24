@@ -56,11 +56,7 @@ jobs:
 
     steps:
       -  attach_workspace:
-           at:
-             - config-server
-             - discovery-server
-             - service1
-             - service2
+           at: .
       - run: ls -al
       # build docker images
       - run: docker image build -t config-server config-server/
