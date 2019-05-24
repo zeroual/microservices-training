@@ -49,6 +49,7 @@ jobs:
             - discovery-server
             - service1
             - service2
+            - k8s.yml
   deploy:
     docker:
       - image: google/cloud-sdk
