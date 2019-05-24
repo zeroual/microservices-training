@@ -1,0 +1,143 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config-server
+  template:
+    metadata:
+      labels:
+        app: config-server
+    spec:
+      containers:
+        - name: config-server
+          imagePullPolicy: Always
+          image: ${GOOGLE_REGISTRY_URL}/config-server:${CIRCLE_WORKFLOW_ID}
+          ports:
+            - containerPort: 9090
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: discovery-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: discovery-server
+  template:
+    metadata:
+      labels:
+        app: discovery-server
+    spec:
+      containers:
+        - name: discovery-server
+          imagePullPolicy: Always
+          image: ${GOOGLE_REGISTRY_URL}/discovery-server:${CIRCLE_WORKFLOW_ID}
+          ports:
+            - containerPort: 9091
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service1
+  template:
+    metadata:
+      labels:
+        app: service1
+    spec:
+      containers:
+        - name: service1
+          imagePullPolicy: Always
+          image: ${GOOGLE_REGISTRY_URL}/service1:${CIRCLE_WORKFLOW_ID}
+          ports:
+            - containerPort: 8001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service2
+  template:
+    metadata:
+      labels:
+        app: service2
+    spec:
+      containers:
+        - name: service2
+          imagePullPolicy: Always
+          image: ${GOOGLE_REGISTRY_URL}/service2:${CIRCLE_WORKFLOW_ID}
+          ports:
+            - containerPort: 8002
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service1-service
+  namespace: default
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8001
+  selector:
+    app: service1
+  type: LoadBalancer
+  loadBalancerIP: ""
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: config-server-service
+  namespace: default
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9090
+
+  selector:
+    app: config-server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: discovery-server-service
+  namespace: default
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 9091
+
+  selector:
+    app: discovery-server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service2-service
+  namespace: default
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8002
+
+  selector:
+    app: service2
