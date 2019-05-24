@@ -15,4 +15,4 @@ eureka:
       defaultZone: http://discovery-server-service/eureka/
       leaseRenewalIntervalInSeconds: 10
   instance:
-    hostname: service1-service
+    hostname: http://service1-service/

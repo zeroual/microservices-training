@@ -14,4 +14,4 @@ eureka:
     serviceUrl:
       defaultZone: http://discovery-server-service/eureka/
   instance:
-    hostname: service2-service
+    hostname: http://service2-service/
